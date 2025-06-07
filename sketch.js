@@ -7,8 +7,30 @@ let circles = [
 //The radius of all circles is set to 54
 const RADIUS = 54;
 
+// song will hold the audio data we load from disk
+// analyser will hold the amplitude data from the audio
+let song, analyser;
+
+// Let's load the sound file in preload
+function preload() {
+  song = loadSound('audio/drumbeat.MP3');
+}
+
 function setup() {
   createCanvas(400, 400);
+
+  //Create a new Amplitude analyser, this will analyse the volume of the song
+  analyser = new p5.Amplitude();
+
+  //Connect the input of the analyser to the song
+  analyser.setInput(song);
+
+  //Create the play/pause button in setup()
+  let button = createButton('Play/Pause');
+  
+  //Place the button in the bottom center of the canvas
+  button.position((width - button.width) / 2, height - button.height - 2);
+  button.mousePressed(play_pause);
 
   //First draw the symmetrical corner background: the upper left half is white, the lower right half is black
   noStroke();
@@ -55,6 +77,15 @@ function draw() {
   drawBlackCircles(260,428);
 
   drawRedCircle(380,400)
+}
+
+//Play/pause audio callback function
+function play_pause() {
+  if (song.isPlaying()) {
+    song.stop();
+  } else {
+    song.loop();
+  }
 }
 
 
